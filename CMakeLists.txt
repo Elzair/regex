@@ -1,8 +1,18 @@
 cmake_minimum_required(VERSION 3.3)
 
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 project(boost_regex)
 
 option(BOOST_REGEX_SHARED_LIB "Enable dynamic linking" ON)
+
+option(BOOST_REGEX_USE_ICU "Enable support for ICU" OFF)
+
+option(BOOST_REGEX_USE_WREGEX "Enable support for Unicode regular expressions" OFF)
+
+if(BOOST_REGEX_USE_ICU)
+  find_package(ICU REQUIRED)
+endif(BOOST_REGEX_USE_ICU)
 
 set(SOURCE_FILES src/c_regex_traits.cpp
   src/cpp_regex_traits.cpp
@@ -29,7 +39,11 @@ else()
   target_compile_definitions(boost_regex PRIVATE BOOST_REGEX_STATIC_LINK=1)
 endif(BOOST_REGEX_SHARED_LIB)
 
-target_include_directories(boost_regex BEFORE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+if(BOOST_REGEX_USE_ICU)
+  target_compile_definitions(boost_regex PUBLIC BOOST_HAS_ICU=1)
+  target_link_libraries(boost_regex ICU::ICU)
+endif(BOOST_REGEX_USE_ICU)
+
 target_link_libraries(boost_regex
   boost_assert
   boost_concept_check boost_config boost_conversion boost_core
@@ -42,6 +56,12 @@ target_link_libraries(boost_regex
   boost_smart_ptr boost_static_assert
   boost_throw_exception boost_tuple boost_type_index boost_type_traits boost_typeof
   boost_utility)
+
+if(NOT BOOST_REGEX_USE_WREGEX)
+target_compile_definitions(boost_regex PRIVATE BOOST_NO_WREGEX)
+endif(NOT BOOST_REGEX_USE_WREGEX)
+
+target_include_directories(boost_regex BEFORE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 install(TARGETS boost_regex DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/boost DESTINATION include)
