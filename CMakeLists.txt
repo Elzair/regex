@@ -46,16 +46,29 @@ endif(BOOST_REGEX_USE_ICU)
 
 target_link_libraries(boost_regex
   boost::assert
-  boost::concept_check boost::config boost::conversion boost::core
+  boost::concept_check
+  boost::config
+  boost::conversion
+  boost::core
   boost::detail
-  boost::function boost::function_types boost::functional boost::fusion
-  boost::integer boost::iterator
+  boost::function
+  boost::function_types
+  boost::functional
+  boost::fusion
+  boost::integer
+  boost::iterator
   boost::mpl
   boost::optional
-  boost::predef boost::preprocessor
+  boost::predef
+  boost::preprocessor
   boost::range
-  boost::smart_ptr boost::static_assert
-  boost::throw_exception boost::tuple boost::type_index boost::type_traits boost::typeof
+  boost::smart_ptr
+  boost::static_assert
+  boost::throw_exception
+  boost::tuple
+  boost::type_index
+  boost::type_traits
+  boost::typeof
   boost::utility)
 
 if(NOT BOOST_REGEX_USE_WREGEX)
