@@ -44,7 +44,7 @@ if(BOOST_REGEX_USE_ICU)
   target_link_libraries(boost_regex ICU::ICU)
 endif(BOOST_REGEX_USE_ICU)
 
-target_link_libraries(boost::regex
+target_link_libraries(boost_regex
   boost::assert
   boost::concept_check boost::config boost::conversion boost::core
   boost::detail
